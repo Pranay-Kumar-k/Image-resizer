@@ -43,7 +43,20 @@ function sendImage(e) {
         alertError('Please fill the width and height fields');
         return;
     }
+
+    // send to main using ipcRenderer
+    ipcRenderer.send('image:resize', {
+        imgPath,
+        width,
+        height
+    })
 }
+
+// catch the image:done event
+ipcRenderer.on('image:done', () => {
+    alertSuccess("Image resize successful")
+})
+
 // Make sure file is image
 function isImageFile(file) {
     const acceptedImageTypes = ['image/gif', 'image/png', 'image/jpeg'];
