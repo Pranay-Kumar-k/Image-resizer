@@ -23,6 +23,20 @@ function createMainWindow() {
     mainWindow.loadFile(path.join(__dirname, './renderer/index.html'));
 }
 
+// create about window
+function createAboutWindow() {
+    const aboutWindow = new BrowserWindow({
+        title: "About Image Resizer",
+        width: 300,
+        height: 300
+    });
+    // open devtools if in dev env
+    if (isDev) {
+        aboutWindow.webContents.openDevTools();
+    }
+    // loading file or url like twitter in desktop app
+    aboutWindow.loadFile(path.join(__dirname, './renderer/about.html'));
+}
 //starting the app when ready
 app.whenReady().then(() => {
     createMainWindow();
@@ -39,9 +53,25 @@ app.whenReady().then(() => {
 })
 
 //menu template
-const menu = [{
-    role: 'fileMenu'
-}]
+const menu = [
+    ...(isMac ? [{
+        label: app.name,
+        submenu: [{
+            label: 'About',
+            click: createAboutWindow
+        }]
+    }] : []),
+    {
+        role: 'fileMenu'
+    },
+    ...(!isMac ? [{
+        label: 'Help',
+        submenu: [{
+            label: 'About',
+            click: createAboutWindow
+        }]
+    }] : [])
+]
 
 // quit the app if the device is not mac
 app.on('window-all-closed', () => {
