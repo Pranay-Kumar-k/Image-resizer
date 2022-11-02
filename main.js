@@ -40,12 +40,7 @@ app.whenReady().then(() => {
 
 //menu template
 const menu = [{
-    label: 'File',
-    submenu: [{
-        label: 'Quit',
-        click: () => app.quit(),
-        accelarator: 'CmdOrCtrl+W'
-    }]
+    role: 'fileMenu'
 }]
 
 // quit the app if the device is not mac
