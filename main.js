@@ -1,7 +1,8 @@
 const path = require("path");
 const {
     app,
-    BrowserWindow
+    BrowserWindow,
+    Menu
 } = require("electron");
 
 const isMac = process.platform === 'darwin';
@@ -12,7 +13,7 @@ function createMainWindow() {
     const mainWindow = new BrowserWindow({
         title: "Image Resizer",
         width: isDev ? 1000 : 500,
-        height: 600
+        height: 700
     });
     // open devtools if in dev env
     if (isDev) {
@@ -22,8 +23,13 @@ function createMainWindow() {
     mainWindow.loadFile(path.join(__dirname, './renderer/index.html'));
 }
 
-//starting the app 
+//starting the app when ready
 app.whenReady().then(() => {
+    createMainWindow();
+
+    // Menu Implementation
+    const mainMenu = Menu.buildFromTemplate(menu);
+    Menu.setApplicationMenu(mainMenu);
     // check if any windows are open for this app and if not start a new window 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
@@ -31,6 +37,16 @@ app.whenReady().then(() => {
         }
     })
 })
+
+//menu template
+const menu = [{
+    label: 'File',
+    submenu: [{
+        label: 'Quit',
+        click: () => app.quit(),
+        accelarator: 'CmdOrCtrl+W'
+    }]
+}]
 
 // quit the app if the device is not mac
 app.on('window-all-closed', () => {
