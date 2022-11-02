@@ -13,7 +13,12 @@ function createMainWindow() {
     const mainWindow = new BrowserWindow({
         title: "Image Resizer",
         width: isDev ? 1000 : 500,
-        height: 700
+        height: 700,
+        webPreferences: {
+            contextIsolation: true,
+            nodeIntegration: true,
+            preload: path.join(__dirname, 'preload.js')
+        }
     });
     // open devtools if in dev env
     if (isDev) {
